@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import data from './data/data.json'
-import Contacts from './Contacts/Contacts';
-import Forma from './Forma/Forma';
+import Contacts from './Contacts';
+import Forma from './Forma';
 import { nanoid } from 'nanoid'
 import { Notify } from 'notiflix';
 import { Title } from './Wrapper/Wrapper.styled';
-import Filter from './Filter/Filter';
-import Wrapper from './Wrapper/Wrapper';
+import Filter from './Filter';
+import Wrapper from './Wrapper';
+// import Wrapper from './Wrapper/Wrapper';
 
   class App extends Component {
     state = {
@@ -14,6 +15,29 @@ import Wrapper from './Wrapper/Wrapper';
       filter: '',
 
     };
+    // ! ====== Write from localStorage in state (if localStorage data exist)======
+    componentDidMount() {
+    console.log('App componentDidMount');
+
+    const parsedContacts= JSON.parse(localStorage.getItem('contacts'));
+
+      if (parsedContacts) {
+        console.log("write contacts in state from localStorage", parsedContacts);
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+    // ! ====== Write any change of state to localStorage ======
+    componentDidUpdate(_, prevState) {
+      console.log('App componentDidUpdate');
+
+      const nextContacts = this.state.contacts;
+      const prevContacts = prevState.contacts;
+
+      if (nextContacts !== prevContacts) {
+        console.log('Оновився об"єкт contacts із state, записуємо contacts у  localStorage');
+        localStorage.setItem('contacts', JSON.stringify(nextContacts))
+      }
+    }
 
 
     // ! ====== Add contact to state ======
@@ -64,6 +88,7 @@ if (contactIsList) {
 
     // ! ====== Function-filter contacts for render ======
     visibleContacts = () => {
+    console.log("visibleContacts was to work")
     const { filter, contacts } = this.state;
     const seekLetterOfFilter = filter.toLowerCase();
     return contacts.filter(contact =>
@@ -90,5 +115,6 @@ if (contactIsList) {
       )
     }
   }
+
 
   export default App;

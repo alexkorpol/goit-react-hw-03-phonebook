@@ -3,7 +3,7 @@ import { Button, Form, Input, Label, Span } from './Forma.styled';
 import { nanoid } from 'nanoid'
 
 
-class Forma extends Component {
+export default class Forma extends Component {
   state = {
     name: '',
     number: '',
@@ -76,7 +76,7 @@ handleSubmit = e => {
    }
 }
 
-  export default Forma;
+
 
 
 
