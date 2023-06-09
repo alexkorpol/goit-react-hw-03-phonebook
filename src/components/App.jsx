@@ -7,7 +7,6 @@ import { Notify } from 'notiflix';
 import { Title } from './Wrapper/Wrapper.styled';
 import Filter from './Filter';
 import Wrapper from './Wrapper';
-// import Wrapper from './Wrapper/Wrapper';
 
   class App extends Component {
     state = {
@@ -41,36 +40,38 @@ import Wrapper from './Wrapper';
 
 
     // ! ====== Add contact to state ======
-    addNewContact = ({ name, number, contactIsList }) => {
-    const newNameToLowerCase = name.toLowerCase();
-    const {  contacts } = this.state;
+    addNewContact = ({ nameNew, numberNew}) => {
+      console.log("nameNew, numberNew", nameNew, numberNew);
 
-    contacts.forEach(contact => {
-      if (contact.name.toLowerCase() === newNameToLowerCase && contact.number === number) {
-        Notify.failure(`${contact.name}: ${contact.number} is already in contacts`)
-        contactIsList = true;
+    const newNameToLowerCase = nameNew.toLowerCase();
+      const { contacts } = this.state;
+
+      let index = -1
+
+     index = (contacts.findIndex(({ name, number }) => (name.toLowerCase() === newNameToLowerCase && number === numberNew)))
+    if(index !== -1){
+        Notify.failure(`${contacts[index].name} and number ${contacts[index].number}   is already in list contacts`);
+        console.log("index >>>", index);
+        return;
+        }
+
+    index = (contacts.findIndex(({ number }) => (number === numberNew)))
+    if(index !== -1) {
+        Notify.failure(`This number ${contacts[index].number} is already in list contacts ${contacts[index].name}`);
         return;
       }
-      if (contact.number === number) {
-        Notify.failure(`${contact.number} existed in contact ${contact.name}`)
-        contactIsList = true;
-        return;
-      }
-    });
 
-if (contactIsList) {
-      return;
-    }
+
     const newContact = {
       id: nanoid(),
-      name: name,
-      number: number,
+      name: nameNew,
+      number: numberNew,
     };
 
     this.setState(prevState => ({
       contacts: [...prevState.contacts, newContact],
     }));
-  };
+  }
 
     // ! ====== Delete contact from state ======
 
